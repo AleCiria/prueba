@@ -66,6 +66,13 @@ var test_procedure = {
 };
 timeline.push(test_procedure);
 
+const finished = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: "Finished!",
+  choices: "NO_KEYS",
+};
+timeline.push(finished);
+    
 const save_data = {
   type: jsPsychPipe,
   action: "save",
@@ -75,12 +82,7 @@ const save_data = {
 };
 timeline.push(save_data);
 
- const finished = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: "Finished!",
-    choices: "NO_KEYS",
-};
-timeline.push(finished);
+
 
 jsPsych.run(timeline);
 
