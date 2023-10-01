@@ -2,135 +2,72 @@
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.2"></script>
-    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+    <script src="https://unpkg.com/jspsych@7.3.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-slider-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
   </head>
   <body></body>
-  <script>
-    
+  <script>  
 
-    var timeline = [];
+
+
+var jsPsych = initJsPsych({
+    on_finish: function() {
+        jsPsych.data.displayData('csv');
+    }
+})
+
+
+var timeline = [];
 
 
 const subject_id = jsPsych.randomization.randomID(10);
 const filename = `${subject_id}.csv`;
 
-//var jsPsych = initJsPsych({
-//    default_iti: 1000,
-//    on_finish: function() {
-//    jsPsych.data.displayData('csv');
-//    }
-//})
-
-// var preload = {
-//      type: jsPsychPreload,
-//      auto_preload: true, 
-//      images: ['Ale/derecha_base.gif', 'Ale/izquierda_base.gif', 'Ale/izquierda_arrow_left.gif', 
-//      'Ale/izquierda_arrow_right.gif', 'Ale/izquierda_text_left.gif', 'Ale/izquierda_text_right.gif', 
-//      'Ale/derecha_arrow_left.gif', 'Ale/derecha_arrow_right.gif', 'Ale/derecha_text_left.gif', 
-//      'Ale/derecha_text_right.gif']
-//    };
-
-var preload = {
-     type: jsPsychPreload,
-     auto_preload: true, 
-     images: ['derecha_base.gif', 'izquierda_base.gif', 'izquierda_arrow_left.gif', 'izquierda_arrow_right.gif']
-   };
-
-//INSTRUCCIONES
-var instrucciones = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `<p><strong>Instrucciones</p>`,
-  choices: ['Continuar']
-};
-timeline.push(instrucciones);
+//console.log(jsPsych.data.get().csv());
 
 
-//INICIO ENSAYOS LINEA BASE
-var inicio_base = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `<p><strong>Iniciar los ensayos línea base</p>`,
-  choices: ['Continuar']
-};
-timeline.push(inicio_base);
+/* define trial stimuli array for timeline variables */
+var test_stimuli = [
+    { stimulus: "AZUL",  correct_response: 'f'},
+    { stimulus: "NARANJA",  correct_response: 'j'}
+];
 
-// Gifs de la fase de prueba o base
-//var gifs_base_1 = ['Ale/derecha_base.gif', 'Ale/izquierda_base.gif'];
-var gifs_base_1 = ['derecha_base.gif', 'izquierda_base.gif'];
-
-// Se aleatorizan los gifs y se indica que se repitan dos veces
-// En este caso el participante hace 4 ensayos base, 2 para izquierda y 2 para derecha
-// Puedes modificar esto para que el participante haga la cantidad de ensayos base que quieras
-// En donde se aleatorizan los gifs, si por ejemplo modificas (gifs_base_1, 3) se van a repetir 3 veces
-var gifs_base = jsPsych.randomization.repeat(gifs_base_1, 2);
-
-// Estructura de los ensayos base
-// Los ensayos se estructuran mediante un loop o bucle - for
-// Se crea una variable llamada ensayos_base con valor 0 y mientras ensayos_base sea
-// menor a la longitud (o cantidad de elementos) se le suma 1 al valor de ensayos_base 
-// cada vez que se presenta un gif de la variable gifs_base, cuando valga lo mismo ensayos_base, 
-// en este caso 4 (cuatro gifs), se sale del loop, ya tine la misma longitud ensayos_base = 4
-for(var ensayos_base = 0; ensayos_base<gifs_base.length; ensayos_base++){
-    var base = {
-        type: jsPsychImageSliderResponse,
-        stimulus: gifs_base[ensayos_base],
-        labels: ['Izquierda', 'Derecha'],
-        prompt: "<p>¿Qué tan intenso percibes que el estímulo se mueve hacia una dirección?</p>",
-        button_label: 'Continuar',
-        require_movement: true,
-        render_on_canvas: false
-    };
-    timeline.push(base);
+/* define fixation and test trials */
+var fixation = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<div style="font-size:60px;">+</div>',
+    choices: "NO_KEYS",
+    trial_duration: function(){
+    return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+    },
+    data: {
+        task: 'fixation'
+    }
 };
 
-
-//INICIO ENSAYOS EXPERIMENTO
-
-var inicio_experimento = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `<p><strong>Inicia la tarea..instrucciones, bla bla</p>`,
-  choices: ['Continuar']
-};
-timeline.push(inicio_experimento);
-
-// Gifs de los ensayos experimentales
-//var gifs_1 = ['Ale/izquierda_arrow_left.gif', 'Ale/izquierda_arrow_right.gif', 'Ale/izquierda_text_left.gif', 
-//            'Ale/izquierda_text_right.gif', 'Ale/derecha_arrow_left.gif', 'Ale/derecha_arrow_right.gif', 
-//            'Ale/derecha_text_left.gif', 'Ale/derecha_text_right.gif'];
-
-var gifs_1 = ['izquierda_arrow_left.gif', 'izquierda_arrow_right.gif'];
-
-// Se aleatorizan y se repiten una sola vez, lo puedes cambiar si es necesario
-var gifs = jsPsych.randomization.repeat(gifs_1, 2);
-
-// Estructura de los ensayos experimentales (8 ensayos dado que son 8 gifs)
-for(var ensayos = 0; ensayos<gifs.length; ensayos++){
-    var trial = {
-        type: jsPsychImageSliderResponse,
-        stimulus: gifs[ensayos],
-        labels: ['Izquierda', 'Derecha'],
-        prompt: "<p>¿Qué tan intenso percibes que el estímulo se mueve hacia una dirección?</p>",
-        button_label: 'Continuar',
-        require_movement: true,
-        render_on_canvas: false
-    };
-    timeline.push(trial);
+var test = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: jsPsych.timelineVariable('stimulus'),
+    choices: ['f', 'j'],
+    data: {
+        task: 'response',
+        correct_response: jsPsych.timelineVariable('correct_response')
+    },
+    on_finish: function(data){
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+    }
 };
 
-
-
-//FIN DEL EXPERIMENTO
-var final_experimento = {
-  type: jsPsychHtmlButtonResponse,
-  stimulus: `<p><strong>La tarea ha finalizado</strong></p><p>¡Muchas gracias por tu participación!</p>`,
-  choices: ['Continuar']
+/* define test procedure */
+var test_procedure = {
+    timeline: [fixation, test],
+    timeline_variables: test_stimuli,
+    repetitions: 5,
+    randomize_order: true
 };
-timeline.push(final_experimento);
+timeline.push(test_procedure);
 
 
 const save_data = {
