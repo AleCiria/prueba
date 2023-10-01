@@ -12,14 +12,14 @@
 
 
 
-var jsPsych = initJsPsych();
-
-
-var timeline = [];
-
+var jsPsych = initJsPsych({});
 
 const subject_id = jsPsych.randomization.randomID(10);
-const filename = `${subject_id}.csv`;
+jsPsych.data.addProperties({subject_id: subject_id});
+
+
+// var timeline = [];
+
 
 //console.log(jsPsych.data.get().csv());
 
@@ -60,22 +60,25 @@ var test = {
 var test_procedure = {
     timeline: [fixation, test],
     timeline_variables: test_stimuli,
-    repetitions: 5,
+    repetitions: 2,
     randomize_order: true
 };
-timeline.push(test_procedure);
-
 
 const save_data = {
   type: jsPsychPipe,
   action: "save",
   experiment_id: "u3lsSl9QHQrv",
-  filename: filename,
+  filename: `${subject_id}.csv`,
   data_string: ()=>jsPsych.data.get().csv()
 };
-timeline.push(save_data);
 
-jsPsych.run(timeline);
+ const finished = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "Finished!",
+    choices: "NO_KEYS",
+};
+
+jsPsych.run(test_procedure, save_data, finished);
 
   </script>
 </html>
