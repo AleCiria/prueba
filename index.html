@@ -18,7 +18,7 @@ const subject_id = jsPsych.randomization.randomID(10);
 jsPsych.data.addProperties({subject_id: subject_id});
 
 
-// var timeline = [];
+var timeline = [];
 
 
 //console.log(jsPsych.data.get().csv());
@@ -43,6 +43,7 @@ var fixation = {
     }
 };
 
+
 var test = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: jsPsych.timelineVariable('stimulus'),
@@ -63,6 +64,7 @@ var test_procedure = {
     repetitions: 2,
     randomize_order: true
 };
+timeline.push(test_procedure);
 
 const save_data = {
   type: jsPsychPipe,
@@ -71,14 +73,16 @@ const save_data = {
   filename: `${subject_id}.csv`,
   data_string: ()=>jsPsych.data.get().csv()
 };
+timeline.push(save_data);
 
  const finished = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "Finished!",
     choices: "NO_KEYS",
 };
+timeline.push(finished);
 
-jsPsych.run(test_procedure, save_data, finished);
+jsPsych.run(timeline);
 
   </script>
 </html>
