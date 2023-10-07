@@ -5,7 +5,7 @@
     <script src="https://unpkg.com/jspsych@7.3.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-animation@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
     <script type="text/javascript" src="Stim_List_1.js"></script>
@@ -70,6 +70,19 @@ var test_procedure = {
 };
 timeline.push(test_procedure);
 
+// Se crea la variable "imagenes" para cargarlas antes del experimento
+var imagenes = ["airplane_interior_A.jpg", "airplane_interior_A_CON.jpg", "art_gallery_A.jpg", "art_gallery_A_INC.jpg"];
+
+
+//La tarea tarda un poco en cargar, gracias por tu paciencia
+
+// Se cargan los elementos de "imagenes" antes de iniciar el experimento
+var preload = {
+    type: jsPsychPreload,
+    images: imagenes
+};
+timeline.push(preload);
+    
 ////////////////////////////////////
 /////////INICIO FASE EXPO///////////
 ////////////////////////////////////
@@ -77,7 +90,7 @@ timeline.push(test_procedure);
 //se crea el primer ramdom Condition de las opciones para la fase de exposición 
 var primer_random = jsPsych.randomization.sampleWithoutReplacement([1, 2], 1)[0];
 
-jsPsych.data.addProperties({condición_fase_1: primer_random});
+jsPsych.data.addProperties({condicion_fase_1: primer_random});
 
 if (primer_random == 1) {
   texto_respuestas = "<p><strong>CONGRUENTE</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>INCONGRUENTE</strong></p>"; Stim_List= Stim_List_1;
@@ -90,9 +103,9 @@ if (primer_random == 1) {
 var test_trial= {
   type: jsPsychAnimation,
   stimuli: jsPsych.timelineVariable('stimulus'),
-  frame_time:1500,
+  frame_time: 1500,
   choices: "NO_KEYS",
-  render_on_canvas:true
+  render_on_canvas: true
   
 };
 
