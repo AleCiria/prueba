@@ -8,10 +8,12 @@
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+    <script type="text/javascript" src="Stim_List_1.js"></script>
+    <script type="text/javascript" src="Stim_List_2.js"></script>
+    <script language="javascript">
   </head>
   <body></body>
   <script>  
-
 
 
 var jsPsych = initJsPsych({});
@@ -73,9 +75,9 @@ timeline.push(test_procedure);
 ////////////////////////////////////
 
 if (primer_random == 1) {
-  texto_respuestas = "<p><strong>CONGRUENTE</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>INCONGRUENTE</strong></p>"; Stim_List= Stim_List_1.js;
+  texto_respuestas = "<p><strong>CONGRUENTE</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>INCONGRUENTE</strong></p>"; Stim_List= Stim_List_1;
 } else if (primer_random == 2) {
-  texto_respuestas = "<p><strong>INCONGRUENTE</strong>&nbsp;&nbsp;&nbsp;<strong>CONGRUENTE</strong></p>"; Stim_List= Stim_List_2.js
+  texto_respuestas = "<p><strong>INCONGRUENTE</strong>&nbsp;&nbsp;&nbsp;<strong>CONGRUENTE</strong></p>"; Stim_List= Stim_List_2
 }
 
 /////////////ANIMATION//////////////
