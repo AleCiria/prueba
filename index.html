@@ -4,6 +4,8 @@
     <title>My experiment</title>
     <script src="https://unpkg.com/jspsych@7.3.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-animation@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
   </head>
@@ -61,10 +63,57 @@ var test = {
 var test_procedure = {
     timeline: [fixation, test],
     timeline_variables: test_stimuli,
-    repetitions: 2,
+    repetitions: 1,
     randomize_order: true
 };
 timeline.push(test_procedure);
+
+////////////////////////////////////
+/////////INICIO FASE EXPO///////////
+////////////////////////////////////
+
+if (primer_random == 1) {
+  texto_respuestas = "<p><strong>CONGRUENTE</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>INCONGRUENTE</strong></p>"; Stim_List= Stim_List_1;
+} else if (primer_random == 2) {
+  texto_respuestas = "<p><strong>INCONGRUENTE</strong>&nbsp;&nbsp;&nbsp;<strong>CONGRUENTE</strong></p>"; Stim_List= Stim_List_2
+}
+
+/////////////ANIMATION//////////////
+
+var test_trial= {
+  type: jsPsychAnimation,
+  stimuli: jsPsych.timelineVariable('stimulus'),
+  frame_time:1500,
+  choices: "NO_KEYS",
+  render_on_canvas:true
+  
+};
+
+///////////RESPUESTAS////////////
+
+var respuestas_trial = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: texto_respuestas,
+  choices: ['n', 'v'],
+  trial_duration: 3000,
+ data: { //se establecen los datos que se quieren registrar de la variable ensayo, respuesta del participante, cuál era la respuesta correcta, etc)
+     task: 'congruencia',
+     correct_response: jsPsych.timelineVariable('correct_response'),
+     tipo_estimulo: jsPsych.timelineVariable('tipo')
+    },
+    on_finish: function(data){ //al finalizar cada ensayo mediante este pluginAPI se compara la respuesta asignada a 'data' que provienen de lo almacenado en task: 'response', con la respuesta corecta correct_response y se almacena en la variable data.correct
+      data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+    }
+  }; 
+
+//////////////// PROCEDIMIENTO/////////////
+
+var procedimiento = {
+  timeline: [fixation, test_trial, respuestas_trial],
+  timeline_variables: Stim_List,
+  randomize_order: true,
+};
+timeline.push(procedimiento);
 
 var finished = {
   type: jsPsychHtmlKeyboardResponse,
