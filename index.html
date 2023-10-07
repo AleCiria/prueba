@@ -101,6 +101,16 @@ if (primer_random == 1) {
 
 /////////////ANIMATION//////////////
 
+var test = {
+  type: jsPsychAnimation,
+  stimuli: ["airplane_interior_A.jpg", "airplane_interior_A_CON.jpg"],
+  frame_time: 1500,
+  choices: "NO_KEYS",
+  render_on_canvas: true
+  
+};
+timeline.push(test);
+
 var test_trial= {
   type: jsPsychAnimation,
   stimuli: jsPsych.timelineVariable('stimulus'),
