@@ -15,7 +15,7 @@
   <body></body>
   <script>  
 
-
+    
 var jsPsych = initJsPsych({});
 
 const subject_id = jsPsych.randomization.randomID(10);
@@ -73,6 +73,11 @@ timeline.push(test_procedure);
 ////////////////////////////////////
 /////////INICIO FASE EXPO///////////
 ////////////////////////////////////
+
+//se crea el primer ramdom Condition de las opciones para la fase de exposición 
+var primer_random = jsPsych.randomization.sampleWithoutReplacement([1, 2], 1)[0];
+
+jsPsych.data.addProperties({condición_fase_1: primer_random});
 
 if (primer_random == 1) {
   texto_respuestas = "<p><strong>CONGRUENTE</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>INCONGRUENTE</strong></p>"; Stim_List= Stim_List_1;
